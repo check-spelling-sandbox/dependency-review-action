@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 import {Octokit} from 'octokit'
 import spdxParse from 'spdx-expression-parse'
-import {Changes} from './schemas'
+import {Changes} from './schemas.js'
 
 export function groupDependenciesByManifest(
   changes: Changes

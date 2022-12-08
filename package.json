@@ -4,6 +4,7 @@
   "private": true,
   "description": "A GitHub Action for Dependency Review",
   "main": "lib/main.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",

@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import * as githubUtils from '@actions/github/lib/utils'
+import * as githubUtils from '@actions/github/lib/utils.js'
 import * as retry from '@octokit/plugin-retry'
-import {Changes, ChangesSchema} from './schemas'
+import {Changes, ChangesSchema} from './schemas.js'
 
 const retryingOctokit = githubUtils.GitHub.plugin(retry.retry)
 const octo = new retryingOctokit(

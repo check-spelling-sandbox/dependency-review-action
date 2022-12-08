@@ -3,8 +3,8 @@ import path from 'path'
 import YAML from 'yaml'
 import * as core from '@actions/core'
 import * as z from 'zod'
-import {ConfigurationOptions, ConfigurationOptionsSchema} from './schemas'
-import {isSPDXValid, octokitClient} from './utils'
+import {ConfigurationOptions, ConfigurationOptionsSchema} from './schemas.js'
+import {isSPDXValid, octokitClient} from './utils.js'
 
 type ConfigurationOptionsPartial = Partial<ConfigurationOptions>
 

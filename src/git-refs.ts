@@ -1,4 +1,4 @@
-import {PullRequestSchema, ConfigurationOptions} from './schemas'
+import {PullRequestSchema, ConfigurationOptions} from './schemas.js'
 
 export function getRefs(
   config: ConfigurationOptions,

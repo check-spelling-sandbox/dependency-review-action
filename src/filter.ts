@@ -1,4 +1,4 @@
-import {Changes, Severity, SEVERITIES, Scope} from './schemas'
+import {Changes, Severity, SEVERITIES, Scope} from './schemas.js'
 
 export function filterChangesBySeverity(
   severity: Severity,

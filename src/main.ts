@@ -1,23 +1,23 @@
 import * as core from '@actions/core'
-import * as dependencyGraph from './dependency-graph'
+import * as dependencyGraph from './dependency-graph.js'
 import * as github from '@actions/github'
 import styles from 'ansi-styles'
 import {RequestError} from '@octokit/request-error'
-import {Change, Severity, Changes} from './schemas'
-import {readConfig} from '../src/config'
+import {Change, Severity, Changes} from './schemas.js'
+import {readConfig} from '../src/config.js'
 import {
   filterChangesBySeverity,
   filterChangesByScopes,
   filterAllowedAdvisories
-} from '../src/filter'
-import {getInvalidLicenseChanges} from './licenses'
-import * as summary from './summary'
-import {getRefs} from './git-refs'
+} from '../src/filter.js'
+import {getInvalidLicenseChanges} from './licenses.js'
+import * as summary from './summary.js'
+import {getRefs} from './git-refs.js'
 
 import {groupDependenciesByManifest} from './utils.js'
-import {HTTPError} from 'got'
+import { HTTPError } from 'got'
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
   console.log(`run`)
   try {
     const config = await readConfig()

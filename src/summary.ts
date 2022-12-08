@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
-import {ConfigurationOptions, Changes} from './schemas'
-import {SummaryTableRow} from '@actions/core/lib/summary'
-import {groupDependenciesByManifest, getManifestsSet, renderUrl} from './utils'
+import {ConfigurationOptions, Changes} from './schemas.js'
+import {SummaryTableRow} from '@actions/core/lib/summary.js'
+import {groupDependenciesByManifest, getManifestsSet, renderUrl} from './utils.js'
 
 export function addSummaryToSummary(
   addedPackages: Changes | null,
