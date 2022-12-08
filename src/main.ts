@@ -14,7 +14,8 @@ import {getInvalidLicenseChanges} from './licenses'
 import * as summary from './summary'
 import {getRefs} from './git-refs'
 
-import {groupDependenciesByManifest} from './utils'
+import {groupDependenciesByManifest} from './utils.js'
+import {HTTPError} from 'got'
 
 async function run(): Promise<void> {
   console.log(`run`)
@@ -87,6 +88,14 @@ async function run(): Promise<void> {
     } else if (error instanceof RequestError && error.status === 403) {
       core.setFailed(
         `Dependency review is not supported on this repository. Please ensure that Dependency graph is enabled, see https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/settings/security_analysis`
+      )
+    } else if (error instanceof HTTPError && error.response.statusCode === 404) {
+      core.setFailed(
+        `!! Dependency review could not obtain dependency data for the specified owner, repository, or revision range.`
+      )
+    } else if (error instanceof HTTPError && error.response.statusCode === 403) {
+      core.setFailed(
+        `!! Dependency review is not supported on this repository. Please ensure that Dependency graph is enabled, see https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/settings/security_analysis`
       )
     } else {
       if (error instanceof Error) {
