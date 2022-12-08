@@ -324,25 +324,34 @@ const git_refs_1 = __nccwpck_require__(1086);
 const utils_1 = __nccwpck_require__(918);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(`run`);
         try {
             const config = yield (0, config_1.readConfig)();
+            console.log('config', config);
             const refs = (0, git_refs_1.getRefs)(config, github.context);
+            console.log('refs', refs);
             const changes = yield dependencyGraph.compare({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
                 baseRef: refs.base,
                 headRef: refs.head
             });
+            console.log('changes', changes);
             const minSeverity = config.fail_on_severity;
+            console.log(`minSeverity: ${minSeverity}`);
             const scopedChanges = (0, filter_1.filterChangesByScopes)(config.fail_on_scopes, changes);
+            console.log(`scopedChanges: ${scopedChanges}`);
             const filteredChanges = (0, filter_1.filterAllowedAdvisories)(config.allow_ghsas, scopedChanges);
+            console.log(`filteredChanges: ${filteredChanges}`);
             const addedChanges = (0, filter_1.filterChangesBySeverity)(minSeverity, filteredChanges).filter(change => change.change_type === 'added' &&
                 change.vulnerabilities !== undefined &&
                 change.vulnerabilities.length > 0);
+            console.log(`addedChanges: ${addedChanges}`);
             const invalidLicenseChanges = yield (0, licenses_1.getInvalidLicenseChanges)(filteredChanges, {
                 allow: config.allow_licenses,
                 deny: config.deny_licenses
             });
+            console.log(`invalidLicenseChanges: ${invalidLicenseChanges}`);
             summary.addSummaryToSummary(config.vulnerability_check ? addedChanges : null, config.license_check ? invalidLicenseChanges : null);
             if (config.vulnerability_check) {
                 summary.addChangeVulnerabilitiesToSummary(addedChanges, minSeverity);
@@ -356,6 +365,7 @@ function run() {
             printScannedDependencies(changes);
         }
         catch (error) {
+            console.log(`error: ${error}`);
             if (error instanceof request_error_1.RequestError && error.status === 404) {
                 core.setFailed(`Dependency review could not obtain dependency data for the specified owner, repository, or revision range.`);
             }

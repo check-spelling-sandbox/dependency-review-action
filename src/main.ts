@@ -17,9 +17,12 @@ import {getRefs} from './git-refs'
 import {groupDependenciesByManifest} from './utils'
 
 async function run(): Promise<void> {
+  console.log(`run`)
   try {
     const config = await readConfig()
+    console.log('config', config)
     const refs = getRefs(config, github.context)
+    console.log('refs', refs)
 
     const changes = await dependencyGraph.compare({
       owner: github.context.repo.owner,
@@ -27,13 +30,17 @@ async function run(): Promise<void> {
       baseRef: refs.base,
       headRef: refs.head
     })
+    console.log('changes', changes)
 
     const minSeverity = config.fail_on_severity
+    console.log(`minSeverity: ${minSeverity}`)
     const scopedChanges = filterChangesByScopes(config.fail_on_scopes, changes)
+    console.log(`scopedChanges: ${scopedChanges}`)
     const filteredChanges = filterAllowedAdvisories(
       config.allow_ghsas,
       scopedChanges
     )
+    console.log(`filteredChanges: ${filteredChanges}`)
 
     const addedChanges = filterChangesBySeverity(
       minSeverity,
@@ -44,6 +51,7 @@ async function run(): Promise<void> {
         change.vulnerabilities !== undefined &&
         change.vulnerabilities.length > 0
     )
+    console.log(`addedChanges: ${addedChanges}`)
 
     const invalidLicenseChanges = await getInvalidLicenseChanges(
       filteredChanges,
@@ -52,6 +60,7 @@ async function run(): Promise<void> {
         deny: config.deny_licenses
       }
     )
+    console.log(`invalidLicenseChanges: ${invalidLicenseChanges}`)
 
     summary.addSummaryToSummary(
       config.vulnerability_check ? addedChanges : null,
@@ -70,6 +79,7 @@ async function run(): Promise<void> {
     summary.addScannedDependencies(changes)
     printScannedDependencies(changes)
   } catch (error) {
+    console.log(`error: ${error}`)
     if (error instanceof RequestError && error.status === 404) {
       core.setFailed(
         `Dependency review could not obtain dependency data for the specified owner, repository, or revision range.`
